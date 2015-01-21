@@ -23,7 +23,9 @@ import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.swing.JMenu;
 import javax.swing.JComboBox;
@@ -47,6 +49,10 @@ public class frame2 extends JFrame {
 	/**
 	 * Launch the application.
 	 */
+//	JFrame mainFrame;
+	
+	
+	
 	public static void main(String[] args) {
 		try{
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");		
@@ -54,22 +60,40 @@ public class frame2 extends JFrame {
 		catch(Exception e){
 			e.printStackTrace();
 		}
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					frame2 frame = new frame2();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		frame2 frame_2 = new frame2();
+//		frame_2
+//		frame_2.runFrame(frame_2);
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					frame2 frame = new frame2();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
 	}
 
+//	public void runFrame(frame2 frame_2){
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+////					frame2 frame = new frame2();
+//					frame_2.setVisible(true);
+//					
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 	/**
 	 * Create the frame.
 	 */
 	public frame2() {
+		frame2 frame2_temp = this;
+		this.setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -85,6 +109,7 @@ public class frame2 extends JFrame {
 		scrollPane.setViewportView(textArea1);
 		
 		JButton btnNewButton = new JButton("Start Selenium");
+		btnNewButton.setToolTipText("Starting selenium server");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -100,6 +125,7 @@ public class frame2 extends JFrame {
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Start Xampp");
+		btnNewButton_1.setToolTipText("Starting the Xampp server");
 		btnNewButton_1.setBounds(16, 72, 122, 23);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -107,13 +133,35 @@ public class frame2 extends JFrame {
 					textArea1.append("Xampp has started successfully \n");
 					btnNewButton_1.setText("Stop Xampp     ");
 					String command = "C:\\xampp\\xampp_start.exe";
+					Process p = null;
 	            	  try {
-						Runtime.getRuntime().exec("cmd /c "+command);
-						System.out.println("running xampp");
+	            		  p = Runtime.getRuntime().exec("cmd /c "+command);
+						//System.out.println("running xampp");
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+	            	  BufferedReader reader = new BufferedReader(
+								new InputStreamReader(p.getInputStream()));
+						textArea1.setText("");
+						String line = null;
+						try {
+							line = reader.readLine();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						while (line != null) {
+//							System.out.println(line);
+							textArea1.append(line+"\n");
+							try {
+								line = reader.readLine();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+	            	
 				}
 				else{ 
 					textArea1.append("Xampp is stopped successfully \n");
@@ -132,9 +180,21 @@ public class frame2 extends JFrame {
 		contentPane.add(btnNewButton_1);
 		
 		JButton btnNewButton_2 = new JButton("Go Testing");
+		btnNewButton_2.setToolTipText("Go to testing pannel");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				//frame3 newFrame = new frame3();
+				EventQueue.invokeLater(new Runnable() {
+					public void run() {
+						try {
+							frame3 frame_3 = new frame3(frame2_temp);
+							frame_3.setVisible(true);
+							frame2_temp.setVisible(false);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
 			}
 		});
 		btnNewButton_2.setBounds(16, 98, 122, 23);
